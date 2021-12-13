@@ -1,0 +1,124 @@
+        <section class="content">
+            <div class="container text-green ">
+                <?php
+                if ($page == 'Means'){
+                    $link = 'index.php?page='. $page .'&word=';
+                    ?>
+                    <div class="means row" >
+                        <form action="<?php echo 'index.php?page=Means&input_mean= &page=Means'; //$link ?>" class="form-means">
+                            <div class="form-group">
+                                <input type="search" value="<?php echo $_GET['word_mean']; ?>" role="search" name="word_mean" class="form-control" placeholder="اكتب الكلمة هنا" list="means">
+                                <datalist id="means">
+                                    <option>محمد</option>
+                                </datalist>
+                            </div>
+
+                            <div class="form-div-btn">
+                                <input type="submit" class="btn btn-flat btn-lg" name="page" value="Means">
+                            </div>
+                        </form>
+                        <div class="show-word">
+                            <div class="container show">
+                                <?php
+                                /*
+                                $name = 'محمد بد المنعم';
+                                $split = str_split($name);
+                                print_r($split[0]);
+                                 *
+                                 */
+
+                                $word = $_GET['word_mean'];
+
+                                $stmt = $con->prepare("SELECT * FROM means WHERE word LIKE '%$word%' OR mean LIKE '%$word%'");
+                                $stmt->execute(); //array($word,$word)
+                                $means = $stmt->fetch();
+
+
+                                ?>
+                                <div class="table-responsive">
+                                    <!-- <h4 class="text-center" style=""><?php echo $word; ?></h4> -->
+
+                                    <table class="table table-bordered" border="1" cellspacing="4" cellpadding="10">
+                                         <?php
+                                           if ($stmt->rowCount() > 0){
+                                               ?>
+                                        <thead>
+                                            <tr>
+                                                <th>المرادف</th>
+                                                <th>الجمع</th>
+                                                <th>المضاد</th>
+                                                <th>المعجم</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ?>
+                                              <tr>
+                                                 <td><?php
+                                                 date_default_timezone_set("Africa/Cairo");
+                                                            echo date('F');
+                                                            if (stristr($means['word'], $word)){
+                                                                echo $means['mean'];
+                                                            }
+                                                            /*
+                                                     if (!empty($means['mean'])){
+                                                        echo $means['mean'];
+                                                     } else{
+                                                         echo '<p class="text-center">-<p>';
+                                                     }
+
+                                                             */
+                                                 ?></td>
+                                                 <td><?php
+                                                     if (!empty($means['collection'])){
+                                                        echo $means['collection'];
+                                                     } else{
+                                                         echo '<p class="text-center">-<p>';
+                                                     }
+                                                 ?></td>
+                                                 <td><?php
+                                                     if (!empty($means['counter'])){
+                                                        echo $means['counter'];
+                                                     } else{
+                                                         echo '<p class="text-center">-<p>';
+                                                     }
+                                                 ?></td>
+                                                 <td><?php
+                                                     if (!empty($means['GlossaryOf'])){
+                                                        echo $means['GlossaryOf'];
+                                                     } else{
+                                                         echo '<p class="text-center">-<p>';
+                                                     }
+                                                 ?></td>
+                                             </tr>
+                                        </tbody>
+                                    <?php
+                                           } else {
+                                                ?>
+                                                <tr>
+                                                <div class="text-center">
+                                                    <h3>عفوا لايتوافر معنى لكلمة : <?php echo $word;  ?></h3>
+                                                    <p> إذا كنت تريد اضافة معنى لكلمة : <?php echo $word;  ?></p>
+                                                    <!--<a href="addMean.php?word=<?php echo $word; ?>" style="margin-bottom: 10px">-->
+                                                        <button class="btn btn-flat btn-large waves-effect waves-light orange">إضافة معنى</button>
+
+                                                    <br />
+                                                </div>
+                                                </tr>
+                                                <?php
+                                           }
+                                           ?>
+                                    </table>
+                                </div>
+                    <?php
+
+                } elseif ($page == 'Home') {
+                    echo 'Hello! World To Home Page';
+                } elseif ($page == 'GlossaryOf'){
+                    echo 'Hello! World To GlossaryOf Page';
+                } else {
+                    echo 'Error 404';
+                }
+                ?>
+
+            </div>
+        </secetion>
